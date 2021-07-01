@@ -10,3 +10,4 @@ commands:
     description: main command
   medaladmin:
     description: admin command
+    aliases: [ma]
