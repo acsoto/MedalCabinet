@@ -33,13 +33,10 @@ public class MedalShowCmd implements CommandExecutor {
             sender.sendMessage("§e你没有任何勋章");
             return true;
         }
-        switch (args[0]) {
-            case "all":
-                showAll();
-                break;
-            default:
-                show();
-                break;
+        if ("all".equals(args[0])) {
+            showAll();
+        } else {
+            show();
         }
         return false;
     }
@@ -49,7 +46,7 @@ public class MedalShowCmd implements CommandExecutor {
                 .append(sender.getName())
                 .append("展示了他的勋章：\n");
         for (Medal medal : Factory.getFactory().getPlayersAllMedal(sender.getName()).values()) {
-            stringBuilder.append("§7[").append(medal.getName()).append("§7] ");
+            stringBuilder.append(medal).append(" ");
         }
         MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder.toString());
     }
@@ -60,11 +57,11 @@ public class MedalShowCmd implements CommandExecutor {
             sender.sendMessage("无此勋章");
             return;
         }
-        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e")
-                .append(sender.getName())
-                .append("展示了他的勋章：\n")
-                .append("§7[").append(medal.getName()).append("§7]");
-        MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder.toString());
+        String stringBuilder = "§d§l勋章系统 §7>>> §e" +
+                sender.getName() +
+                "展示了他的勋章：\n" +
+                medal;
+        MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder);
     }
     
 }

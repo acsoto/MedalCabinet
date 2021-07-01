@@ -36,4 +36,9 @@ public class Medal {
     public ArrayList<String> getDescriptions() {
         return descriptions;
     }
+    
+    @Override
+    public String toString() {
+        return "§7[" + name + "§7]";
+    }
 }

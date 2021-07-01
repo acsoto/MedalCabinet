@@ -21,6 +21,7 @@ public class MedalAdminCmd implements CommandExecutor {
         sender.sendMessage("§a/medaladmin addlore <medalId> <des> ... §2添加描述");
         sender.sendMessage("§a/medaladmin setmat <medalId> <Material> §2设置材质");
         sender.sendMessage("§a/medaladmin give <player> <medalId> §2添加勋章");
+        sender.sendMessage("§a/medaladmin list §2勋章列表");
         sender.sendMessage("§a/medaladmin reload §2重载");
     }
     
@@ -50,6 +51,9 @@ public class MedalAdminCmd implements CommandExecutor {
                 break;
             case "reload":
                 reload();
+                break;
+            case "list":
+                list();
                 break;
             default:
         }
@@ -109,5 +113,11 @@ public class MedalAdminCmd implements CommandExecutor {
         Factory.getFactory().getMedals().getMedalHashMap().get(id)
                 .setMaterial(mat);
         sender.sendMessage("Ok");
+    }
+    
+    private void list() {
+        for (Medal medal : Factory.getFactory().getMedals().getMedalHashMap().values()) {
+            sender.sendMessage(medal.toString() + "\n");
+        }
     }
 }
