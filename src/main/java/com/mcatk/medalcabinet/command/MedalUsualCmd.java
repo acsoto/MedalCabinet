@@ -1,6 +1,5 @@
 package com.mcatk.medalcabinet.command;
 
-import com.mcatk.medalcabinet.Factory;
 import com.mcatk.medalcabinet.MedalsGui;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,11 +18,7 @@ public class MedalUsualCmd implements CommandExecutor {
         } else {
             id = args[0];
         }
-        if (Factory.getFactory().containsPlayer(id)) {
-            ((Player) sender).openInventory(new MedalsGui().getGui(id));
-        } else {
-            sender.sendMessage("§e该玩家没有任何勋章");
-        }
+        ((Player) sender).openInventory(new MedalsGui().getGui(id));
         return true;
     }
 }

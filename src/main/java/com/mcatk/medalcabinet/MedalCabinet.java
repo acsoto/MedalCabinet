@@ -18,7 +18,6 @@ public final class MedalCabinet extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         saveDefaultConfig();
-        new Factory();
         regCommand();
         regListener();
     }

@@ -1,44 +1,36 @@
 package com.mcatk.medalcabinet.medal;
 
-import com.mcatk.medalcabinet.Factory;
-
-import java.util.ArrayList;
-
 public class Medal {
     private String id;
     private String name;
     private String material;
-    private ArrayList<String> descriptions;
-    
-    public Medal(String id, String name) {
+    private String descriptions;
+
+    public Medal(String id, String name, String material, String descriptions) {
         this.id = id;
-        this.name = Factory.colorFormat(name);
-        this.material = "DIAMOND";
-        this.descriptions = new ArrayList<>();
-    }
-    
-    public void setMaterial(String material) {
+        this.name = name;
         this.material = material;
+        this.descriptions = descriptions;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
-    
+
     public String getMaterial() {
         return material;
     }
-    
-    public void addDescription(String str) {
-        descriptions.add(Factory.colorFormat(str));
-    }
-    
-    public ArrayList<String> getDescriptions() {
+
+    public String getDescriptions() {
         return descriptions;
     }
-    
+
     @Override
     public String toString() {
-        return "§7[" + name + "§7]";
+        return "&f" + id + " - " + "§7[" + name + "§7]";
     }
 }

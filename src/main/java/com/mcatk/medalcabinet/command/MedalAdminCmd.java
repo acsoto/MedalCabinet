@@ -1,7 +1,7 @@
 package com.mcatk.medalcabinet.command;
 
-import com.mcatk.medalcabinet.Factory;
 import com.mcatk.medalcabinet.medal.Medal;
+import com.mcatk.medalcabinet.sql.SQLManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,22 +9,20 @@ import org.bukkit.command.CommandSender;
 public class MedalAdminCmd implements CommandExecutor {
     private CommandSender sender;
     private String[] args;
-    
+
     // usage: /medaladmin
-    
+
     public MedalAdminCmd() {
     }
-    
+
     private void printHelp() {
         sender.sendMessage("§e------------帮助------------");
-        sender.sendMessage("§a/medaladmin create <medalId> <Name> §2创建勋章");
-        sender.sendMessage("§a/medaladmin addlore <medalId> <des> ... §2添加描述");
-        sender.sendMessage("§a/medaladmin setmat <medalId> <Material> §2设置材质");
-        sender.sendMessage("§a/medaladmin give <player> <medalId> §2添加勋章");
+        sender.sendMessage("§a/medaladmin create <medalId> <Name> <Material> <Description> §2创建勋章");
+        sender.sendMessage("§a/medaladmin add <player> <medalId> §2添加勋章");
         sender.sendMessage("§a/medaladmin list §2勋章列表");
         sender.sendMessage("§a/medaladmin reload §2重载");
     }
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.isOp()) {
@@ -40,17 +38,8 @@ public class MedalAdminCmd implements CommandExecutor {
             case "create":
                 create();
                 break;
-            case "addlore":
-                addDes();
-                break;
-            case "give":
-                give();
-                break;
-            case "setmat":
-                setMat();
-                break;
-            case "reload":
-                reload();
+            case "add":
+                add();
                 break;
             case "list":
                 list();
@@ -59,64 +48,29 @@ public class MedalAdminCmd implements CommandExecutor {
         }
         return true;
     }
-    
+
     private void create() {
-        if (args.length == 3) {
+        if (args.length == 5) {
             String id = args[1];
             String name = args[2];
-            Factory.getFactory().getMedals().getMedalHashMap()
-                    .put(id, new Medal(id, name));
+            String mat = args[3];
+            String des = args[4];
+            SQLManager.getInstance().createMedal(id, name, mat, des);
             sender.sendMessage("Ok");
-            Factory.getFactory().saveFile();
         }
     }
-    
-    private void addDes() {
-        if (args.length >= 3) {
-            String id = args[1];
-            if (!Factory.getFactory().getMedals().
-                    getMedalHashMap().containsKey(id)) {
-                sender.sendMessage("无该id");
-                return;
-            }
-            for (int i = 2; i < args.length; i++) {
-                Factory.getFactory().getMedals().getMedalHashMap()
-                        .get(id).addDescription(args[i]);
-            }
-            sender.sendMessage("Ok");
-            Factory.getFactory().saveFile();
-        }
-    }
-    
-    private void give() {
+
+    private void add() {
         if (args.length == 3) {
-            String playerId = args[1];
-            String medalId = args[2];
-            Factory.getFactory().getPlayers().addMedal(playerId, medalId);
+            String playerID = args[1];
+            String medalID = args[2];
+            SQLManager.getInstance().addPlayerMedal(playerID, medalID);
             sender.sendMessage("Ok");
-            Factory.getFactory().saveFile();
         }
     }
-    
-    private void reload() {
-        Factory.getFactory().loadFile();
-    }
-    
-    private void setMat() {
-        String id = args[1];
-        String mat = args[2];
-        if (!Factory.getFactory().getMedals().
-                getMedalHashMap().containsKey(id)) {
-            sender.sendMessage("无该id");
-            return;
-        }
-        Factory.getFactory().getMedals().getMedalHashMap().get(id)
-                .setMaterial(mat);
-        sender.sendMessage("Ok");
-    }
-    
+
     private void list() {
-        for (Medal medal : Factory.getFactory().getMedals().getMedalHashMap().values()) {
+        for (Medal medal : SQLManager.getInstance().getAllMedals()) {
             sender.sendMessage(medal.toString() + "\n");
         }
     }
