@@ -31,6 +31,6 @@ public class Medal {
 
     @Override
     public String toString() {
-        return "&f" + id + " - " + "§7[" + name + "§7]";
+        return "§7[" + name + "§7]";
     }
 }
