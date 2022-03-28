@@ -19,6 +19,7 @@ public class MedalAdminCmd implements CommandExecutor {
         sender.sendMessage("§e------------帮助------------");
         sender.sendMessage("§a/medaladmin create <medalId> <Name> <Material> <Description> §2创建勋章");
         sender.sendMessage("§a/medaladmin add <player> <medalId> §2添加勋章");
+        sender.sendMessage("§a/medaladmin check <player> §2查看玩家勋章");
         sender.sendMessage("§a/medaladmin list §2勋章列表");
         sender.sendMessage("§a/medaladmin reload §2重载");
     }
@@ -43,6 +44,9 @@ public class MedalAdminCmd implements CommandExecutor {
                 break;
             case "list":
                 list();
+                break;
+            case "check":
+                check();
                 break;
             default:
         }
@@ -73,5 +77,16 @@ public class MedalAdminCmd implements CommandExecutor {
         for (Medal medal : SQLManager.getInstance().getAllMedals()) {
             sender.sendMessage(medal.toString() + "\n");
         }
+    }
+
+    private void check() {
+        String playerID = args[1];
+        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e")
+                .append(playerID)
+                .append("的勋章：\n");
+        for (Medal medal : SQLManager.getInstance().getPlayerMedals(playerID)) {
+            stringBuilder.append(medal).append(" ");
+        }
+        sender.sendMessage(stringBuilder.toString());
     }
 }
