@@ -14,7 +14,8 @@ public class MedalShowCmd implements CommandExecutor {
 
     private void printHelp() {
         sender.sendMessage("§e------------帮助------------");
-        sender.sendMessage("§a/medalshow all §2展示你全部的勋章");
+        sender.sendMessage("§a/medalshow all §2展示你全部的勋章（全服可见）");
+        sender.sendMessage("§a/medalshow me §2展示你全部的勋章（仅自己可见）");
         sender.sendMessage("§a/medalshow <ID> §2展示你的某个勋章");
     }
 
@@ -31,6 +32,8 @@ public class MedalShowCmd implements CommandExecutor {
         }
         if ("all".equals(args[0])) {
             showAll();
+        } else if ("me".equals(args[0])) {
+            showMe();
         } else {
             show();
         }
@@ -45,6 +48,14 @@ public class MedalShowCmd implements CommandExecutor {
             stringBuilder.append(medal).append(" ");
         }
         MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder.toString());
+    }
+
+    private void showMe() {
+        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e");
+        for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
+            stringBuilder.append(medal).append(" ");
+        }
+        sender.sendMessage(stringBuilder.toString());
     }
 
     private void show() {
