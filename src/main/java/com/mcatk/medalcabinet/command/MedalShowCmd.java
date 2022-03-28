@@ -51,7 +51,9 @@ public class MedalShowCmd implements CommandExecutor {
     }
 
     private void showMe() {
-        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e");
+        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e")
+                .append(sender.getName())
+                .append("的勋章：\n");
         for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
             stringBuilder.append(medal).append(" ");
         }
