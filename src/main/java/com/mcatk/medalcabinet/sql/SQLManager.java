@@ -147,4 +147,28 @@ public class SQLManager {
         return list;
     }
 
+    public boolean setMainMedal(String playerID, String medalID) {
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM player_medal WHERE player_id = ? AND medal_id = ?"
+            );
+            ps.setString(1, playerID);
+            ps.setString(2, medalID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                ps = connection.prepareStatement(
+                        "INSERT INTO `player_main_medal` (player_id, medal_id) VALUES (?,?) ON DUPLICATE KEY UPDATE medal_id = ?"
+                );
+                ps.setString(1, playerID);
+                ps.setString(2, medalID);
+                ps.setString(3, medalID);
+                ps.executeUpdate();
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

@@ -16,7 +16,7 @@ public class MedalShowCmd implements CommandExecutor {
         sender.sendMessage("§e------------帮助------------");
         sender.sendMessage("§a/medalshow all §2展示你全部的勋章（全服可见）");
         sender.sendMessage("§a/medalshow me §2展示你全部的勋章（仅自己可见）");
-        sender.sendMessage("§a/medalshow <ID> §2展示你的某个勋章");
+        sender.sendMessage("§a/medalshow <ID> §2展示你的某个勋章(聊天栏)");
     }
 
     @Override
@@ -55,22 +55,19 @@ public class MedalShowCmd implements CommandExecutor {
                 .append(sender.getName())
                 .append("的勋章：\n");
         for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
-            stringBuilder.append(medal).append(" ");
+            stringBuilder.append(medal.getId()).append(" ").append(medal).append("\n");
         }
         sender.sendMessage(stringBuilder.toString());
     }
 
     private void show() {
-        Medal medal = SQLManager.getInstance().getMedal(args[1]);
-        if (medal == null) {
-            sender.sendMessage("无此勋章");
-            return;
+        String medalID = args[0];
+        if (SQLManager.getInstance().setMainMedal(sender.getName(), medalID)) {
+            Medal medal = SQLManager.getInstance().getMedal(medalID);
+            sender.sendMessage("§d§l勋章系统 §7>>> §e更换展示勋章为" + medal);
+        } else {
+            sender.sendMessage("§d§l勋章系统 §7>>> §e你没有这个勋章");
         }
-        String stringBuilder = "§d§l勋章系统 §7>>> §e" +
-                sender.getName() +
-                "展示了他的勋章：\n" +
-                medal;
-        MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder);
     }
 
 }
