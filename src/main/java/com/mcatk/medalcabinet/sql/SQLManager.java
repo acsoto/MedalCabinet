@@ -171,4 +171,21 @@ public class SQLManager {
         return false;
     }
 
+    public Medal getMainMedal(String playerID) {
+        Medal medal = null;
+        try {
+            PreparedStatement ps = connection.prepareStatement(
+                    "SELECT * FROM `player_main_medal` WHERE player_id = ?"
+            );
+            ps.setString(1, playerID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                medal = getMedal(rs.getString("medal_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return medal;
+    }
+
 }

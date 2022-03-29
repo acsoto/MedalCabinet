@@ -3,6 +3,7 @@ version: ${project.version}
 main: com.mcatk.medalcabinet.MedalCabinet
 authors: [ soto ]
 website: www.mcatk.com
+softdepend: [ PlaceholderAPI ]
 commands:
   medal:
     description: main command
