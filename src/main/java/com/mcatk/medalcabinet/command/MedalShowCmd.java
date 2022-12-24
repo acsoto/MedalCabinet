@@ -13,11 +13,12 @@ public class MedalShowCmd implements CommandExecutor {
     private CommandSender sender;
     private String[] args;
 
+    private final String prefix = "§7[§6勋章墙§7]§7 ";
+
     private void printHelp() {
         sender.sendMessage("§e------------帮助------------");
         sender.sendMessage("§a/medalshow all §2展示你全部的勋章（全服可见）");
         sender.sendMessage("§a/medalshow me §2展示你全部的勋章（仅自己可见）");
-        sender.sendMessage("§a/medalshow <ID> §2展示你的某个勋章(聊天栏)");
     }
 
     @Override
@@ -35,40 +36,30 @@ public class MedalShowCmd implements CommandExecutor {
             showAll();
         } else if ("me".equals(args[0])) {
             showMe();
-        } else {
-            show();
         }
         return false;
     }
 
     private void showAll() {
-        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e")
-                .append(sender.getName())
-                .append("展示了他的勋章：\n");
-        for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
-            stringBuilder.append(medal).append(" ");
-        }
-        MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder.toString());
+        Bukkit.getScheduler().runTaskAsynchronously(MedalCabinet.getPlugin(), () -> {
+            StringBuilder stringBuilder = new StringBuilder(prefix).append("§e").append(sender.getName())
+                    .append(" 展示了他的勋章：\n");
+            for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
+                stringBuilder.append(medal).append(" ");
+            }
+            MedalCabinet.getPlugin().getServer().broadcastMessage(stringBuilder.toString());
+        });
     }
 
     private void showMe() {
-        StringBuilder stringBuilder = new StringBuilder("§d§l勋章系统 §7>>> §e")
-                .append(sender.getName())
-                .append("的勋章：\n");
-        for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
-            stringBuilder.append(medal.getId()).append(" ").append(medal).append("\n");
-        }
-        sender.sendMessage(stringBuilder.toString());
-    }
-
-    private void show() {
-        String medalID = args[0];
-        if (SQLManager.getInstance().setMainMedal(sender.getName(), medalID)) {
-            Medal medal = SQLManager.getInstance().getMedal(medalID);
-            sender.sendMessage("§d§l勋章系统 §7>>> §e更换展示勋章为" + medal);
-        } else {
-            sender.sendMessage("§d§l勋章系统 §7>>> §e你没有这个勋章");
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(MedalCabinet.getPlugin(), () -> {
+            StringBuilder stringBuilder = new StringBuilder(prefix).append("§e").append(sender.getName())
+                    .append(" 的勋章：\n");
+            for (Medal medal : SQLManager.getInstance().getPlayerMedals(sender.getName())) {
+                stringBuilder.append(medal).append(" ");
+            }
+            sender.sendMessage(stringBuilder.toString());
+        });
     }
 
 }

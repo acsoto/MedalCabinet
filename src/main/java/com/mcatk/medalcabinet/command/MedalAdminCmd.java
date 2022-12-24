@@ -1,7 +1,9 @@
 package com.mcatk.medalcabinet.command;
 
+import com.mcatk.medalcabinet.MedalCabinet;
 import com.mcatk.medalcabinet.medal.Medal;
 import com.mcatk.medalcabinet.sql.SQLManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -9,8 +11,6 @@ import org.bukkit.command.CommandSender;
 public class MedalAdminCmd implements CommandExecutor {
     private CommandSender sender;
     private String[] args;
-
-    // usage: /medaladmin
 
     public MedalAdminCmd() {
     }
@@ -21,7 +21,6 @@ public class MedalAdminCmd implements CommandExecutor {
         sender.sendMessage("§a/medaladmin add <player> <medalId> §2添加勋章");
         sender.sendMessage("§a/medaladmin check <player> §2查看玩家勋章");
         sender.sendMessage("§a/medaladmin list §2勋章列表");
-        sender.sendMessage("§a/medaladmin reload §2重载");
     }
 
     @Override
@@ -35,21 +34,23 @@ public class MedalAdminCmd implements CommandExecutor {
             printHelp();
             return true;
         }
-        switch (args[0].toLowerCase()) {
-            case "create":
-                create();
-                break;
-            case "add":
-                add();
-                break;
-            case "list":
-                list();
-                break;
-            case "check":
-                check();
-                break;
-            default:
-        }
+        Bukkit.getScheduler().runTaskAsynchronously(MedalCabinet.getPlugin(), () -> {
+            switch (args[0].toLowerCase()) {
+                case "create":
+                    create();
+                    break;
+                case "add":
+                    add();
+                    break;
+                case "list":
+                    list();
+                    break;
+                case "check":
+                    check();
+                    break;
+                default:
+            }
+        });
         return true;
     }
 
