@@ -2,7 +2,6 @@ name: MedalCabinet
 version: ${project.version}
 main: com.mcatk.medalcabinet.MedalCabinet
 authors: [ soto ]
-website: www.mcatk.com
 softdepend: [ PlaceholderAPI ]
 commands:
   medal:
@@ -11,4 +10,3 @@ commands:
     description: main command
   medaladmin:
     description: admin command
-    aliases: [ma]

@@ -3,6 +3,7 @@ package com.mcatk.medalcabinet.command;
 import com.mcatk.medalcabinet.MedalCabinet;
 import com.mcatk.medalcabinet.medal.Medal;
 import com.mcatk.medalcabinet.sql.SQLManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

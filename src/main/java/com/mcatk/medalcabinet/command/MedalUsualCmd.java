@@ -1,6 +1,8 @@
 package com.mcatk.medalcabinet.command;
 
+import com.mcatk.medalcabinet.MedalCabinet;
 import com.mcatk.medalcabinet.MedalsGui;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,7 +20,9 @@ public class MedalUsualCmd implements CommandExecutor {
         } else {
             id = args[0];
         }
-        ((Player) sender).openInventory(new MedalsGui().getGui(id));
+        Bukkit.getScheduler().runTaskAsynchronously(MedalCabinet.getPlugin(), () -> {
+            new MedalsGui(id).openGUI((Player) sender);
+        });
         return true;
     }
 }

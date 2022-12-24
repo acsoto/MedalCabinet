@@ -20,19 +20,13 @@ public final class MedalCabinet extends JavaPlugin {
         plugin = this;
         saveDefaultConfig();
         regCommand();
-        regListener();
         regDependency();
+        getLogger().info("启动成功");
     }
 
     @Override
     public void onDisable() {
 
-    }
-
-    private void regListener() {
-        Bukkit.getPluginManager().
-                registerEvents(new MedalListener(), this);
-        getLogger().info("监听器注册完毕");
     }
 
     private void regCommand() {
@@ -42,7 +36,6 @@ public final class MedalCabinet extends JavaPlugin {
                 setExecutor(new MedalShowCmd());
         Bukkit.getPluginCommand("medaladmin").
                 setExecutor(new MedalAdminCmd());
-        getLogger().info("注册指令注册完毕");
     }
 
     private void regDependency() {

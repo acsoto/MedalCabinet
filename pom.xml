@@ -17,6 +17,7 @@
     </properties>
 
     <build>
+        <finalName>MedalCabinet</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
