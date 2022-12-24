@@ -63,6 +63,7 @@ public class MedalsGui implements Listener {
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
         if (clickedItem.equals(back)) {
             ((Player) e.getWhoClicked()).chat("/menu");
+            return;
         }
         Medal medal = iconMap.get(clickedItem);
         SQLManager.getInstance().setMainMedal(e.getWhoClicked().getName(), medal.getId());
