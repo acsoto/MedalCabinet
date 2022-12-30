@@ -20,9 +20,7 @@ public class MedalUsualCmd implements CommandExecutor {
         } else {
             id = args[0];
         }
-        Bukkit.getScheduler().runTaskAsynchronously(MedalCabinet.getPlugin(), () -> {
-            new MedalsGui(id).openGUI((Player) sender);
-        });
+        new MedalsGui(id).openGUI((Player) sender);
         return true;
     }
 }
