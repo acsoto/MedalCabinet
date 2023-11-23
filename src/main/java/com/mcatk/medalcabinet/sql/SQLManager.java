@@ -36,13 +36,12 @@ public class SQLManager {
     }
 
     public void createMedal(String medalID, String medalName, String medalMat, String medalDes) {
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO `medal` " +
-                            "(`medal_id`, `medal_name`, `medal_material`,`medal_description`)" +
-                            "VALUES " +
-                            "(?,?,?,?)"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO `medal` " +
+                        "(`medal_id`, `medal_name`, `medal_material`,`medal_description`)" +
+                        "VALUES " +
+                        "(?,?,?,?)"
+        )) {
             ps.setString(1, medalID);
             ps.setString(2, medalName);
             ps.setString(3, medalMat);
@@ -54,10 +53,9 @@ public class SQLManager {
     }
 
     public boolean doesPlayerHaveMedal(String playerID, String medalID) {
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM player_medal WHERE player_id = ? and medal_id = ?"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM player_medal WHERE player_id = ? and medal_id = ?"
+        )) {
             ps.setString(1, playerID);
             ps.setString(2, medalID);
             ResultSet rs = ps.executeQuery();
@@ -89,10 +87,9 @@ public class SQLManager {
 
     public ArrayList<Medal> getAllMedals() {
         ArrayList<Medal> list = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM medal"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM medal"
+        )) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Medal(
@@ -110,10 +107,9 @@ public class SQLManager {
 
     public Medal getMedal(String medalID) {
         Medal medal = null;
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM medal WHERE medal_id = ?"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM medal WHERE medal_id = ?"
+        )) {
             ps.setString(1, medalID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -132,10 +128,9 @@ public class SQLManager {
 
     public ArrayList<Medal> getPlayerMedals(String playerID) {
         ArrayList<Medal> list = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM player_medal WHERE player_id = ?"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT DISTINCT medal_id FROM player_medal WHERE player_id = ?"
+        )) {
             ps.setString(1, playerID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -148,35 +143,27 @@ public class SQLManager {
     }
 
     public boolean setMainMedal(String playerID, String medalID) {
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM player_medal WHERE player_id = ? AND medal_id = ?"
-            );
-            ps.setString(1, playerID);
-            ps.setString(2, medalID);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                ps = connection.prepareStatement(
-                        "INSERT INTO `player_main_medal` (player_id, medal_id) VALUES (?,?) ON DUPLICATE KEY UPDATE medal_id = ?"
-                );
+        if (doesPlayerHaveMedal(playerID, medalID)) {
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO `player_main_medal` (player_id, medal_id) VALUES (?,?) ON DUPLICATE KEY UPDATE medal_id = ?"
+            )) {
                 ps.setString(1, playerID);
                 ps.setString(2, medalID);
                 ps.setString(3, medalID);
                 ps.executeUpdate();
                 return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return false;
     }
 
     public Medal getMainMedal(String playerID) {
         Medal medal = null;
-        try {
-            PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM `player_main_medal` WHERE player_id = ?"
-            );
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT medal_id FROM `player_main_medal` WHERE player_id = ?"
+        )) {
             ps.setString(1, playerID);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
