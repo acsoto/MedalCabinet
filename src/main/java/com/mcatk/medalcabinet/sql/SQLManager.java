@@ -129,12 +129,18 @@ public class SQLManager {
     public ArrayList<Medal> getPlayerMedals(String playerID) {
         ArrayList<Medal> list = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT DISTINCT medal_id FROM player_medal WHERE player_id = ?"
+                "SELECT DISTINCT m.* FROM medal m INNER JOIN player_medal pm ON m.medal_id = pm.medal_id WHERE pm.player_id = ?"
         )) {
             ps.setString(1, playerID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(getMedal(rs.getString("medal_id")));
+                Medal medal = new Medal(
+                        rs.getString("medal_id"),
+                        rs.getString("medal_name"),
+                        rs.getString("medal_material"),
+                        rs.getString("medal_description")
+                );
+                list.add(medal);
             }
         } catch (SQLException e) {
             e.printStackTrace();

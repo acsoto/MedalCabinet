@@ -50,7 +50,9 @@ public class MedalsGui implements Listener {
         ItemStack icon = new ItemStack(Material.getMaterial(medal.getMaterial()), 1);
         ItemMeta meta = icon.getItemMeta();
         meta.setDisplayName(medal.getName());
-        meta.setLore(Arrays.asList(medal.getDescriptions().split("\n")));
+        ArrayList<String> lore = new ArrayList<>(Arrays.asList(medal.getDescriptions().split("\n")));
+        lore.add("§0" + medal.getId());
+        meta.setLore(lore);
         icon.setItemMeta(meta);
         return icon;
     }
